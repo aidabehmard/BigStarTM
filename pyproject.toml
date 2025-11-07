@@ -61,4 +61,6 @@ packages = ["src/comoving"]
       "jaxtyping.*",
       "numpy.*",
       "quax.*",
+      "unxt.*",
+      "comoving.*"
     ]
