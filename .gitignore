@@ -12,3 +12,7 @@ wheels/
 # Gitignore
 *.vot
 *.csv
+
+# Jupyter
+.ipynb_checkpoints
+
