@@ -2,30 +2,37 @@
 
 import jax
 import jax.numpy as jnp
-import quaxed.numpy as qnp
-import unxt as u
+from jaxtyping import ArrayLike
 
 __all__ = ["get_u_vec", "get_tangent_basis"]
 
 
-def get_u_vec(lon: u.Angle, lat: u.Angle) -> jax.Array:
-    """
+def get_u_vec(lon: ArrayLike, lat: ArrayLike) -> jax.Array:
+    """Construct a unit vector pointing in the direction of a given sky coordinate.
+
     Given two sky coordinates at a longitude and latitude (e.g., RA, Dec), return a unit
-    vector that points in the direction of the sky position.
+    vector that points in the direction of that sky position. The inputs can be scalar
+    or arrays. The output will be `(3, *shape)` where `shape` is the broadcasted shape
+    of each input.
     """
     return jnp.array(
-        [qnp.cos(lon) * qnp.cos(lat), qnp.sin(lon) * qnp.cos(lat), qnp.sin(lat)]
+        [jnp.cos(lon) * jnp.cos(lat), jnp.sin(lon) * jnp.cos(lat), jnp.sin(lat)]
     )
 
 
-def get_tangent_basis(lon: u.Angle, lat: u.Angle) -> jax.Array:
-    """
-    row vectors are the tangent-space basis at (lon, lat, r)
+def get_tangent_basis(lon: ArrayLike, lat: ArrayLike) -> jax.Array:
+    """Construct the tangent-space basis vectors at a given sky coordinate.
+
+    Given two sky coordinates at a longitude and latitude (e.g., RA, Dec), return the
+    tangent-space basis vectors at that sky position. The output shape is `(3, 3,
+    *shape)`, where the first dimension indexes the three basis vectors, the second
+    dimension indexes the x, y, z components of each basis vector, and `shape` is the
+    broadcasted shape of each input.
     """
     return jnp.array(
         [
-            [-qnp.sin(lon), qnp.cos(lon), qnp.zeros_like(lon.value)],
-            [-qnp.sin(lat) * qnp.cos(lon), -qnp.sin(lat) * qnp.sin(lon), qnp.cos(lat)],
-            [qnp.cos(lat) * qnp.cos(lon), qnp.cos(lat) * qnp.sin(lon), qnp.sin(lat)],
+            [-jnp.sin(lon), jnp.cos(lon), 0.0],
+            [-jnp.sin(lat) * jnp.cos(lon), -jnp.sin(lat) * jnp.sin(lon), jnp.cos(lat)],
+            [jnp.cos(lat) * jnp.cos(lon), jnp.cos(lat) * jnp.sin(lon), jnp.sin(lat)],
         ]
     )
