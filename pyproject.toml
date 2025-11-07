@@ -16,6 +16,7 @@ dependencies = [
     "matplotlib>=3.9.4",
     "numpy>=1.26.4",
     "scipy>=1.16.3",
+    "unxt>=1.7.2",
 ]
 
 [project.optional-dependencies]
@@ -29,3 +30,35 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/comoving"]
+
+[tool.mypy]
+  disable_error_code = [
+    "name-defined", # for jaxtyping
+  ]
+  disallow_incomplete_defs = false
+  disallow_untyped_defs = false
+  files = ["src"]
+  python_version = "3.12"
+  strict = true
+  warn_return_any = false
+  warn_unreachable = true
+  warn_unused_configs = true
+
+  [[tool.mypy.overrides]]
+    disallow_incomplete_defs = true
+    disallow_untyped_defs = true
+    module = "comoving.*"
+
+  [[tool.mypy.overrides]]
+    ignore_missing_imports = true
+    module = [
+      "quaxed.*",
+      "astropy.*",
+      "equinox.*",
+      "hypothesis.*",
+      "jax.*",
+      "coordinax.*",
+      "jaxtyping.*",
+      "numpy.*",
+      "quax.*",
+    ]
