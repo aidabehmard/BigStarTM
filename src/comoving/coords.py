@@ -1,4 +1,8 @@
-"""Tools to help handle coordinate systems and transformations."""
+"""Tools to help handle coordinate systems and transformations.
+
+TODO:
+- Use unxt and coordinax where possible.
+"""
 
 import jax
 import jax.numpy as jnp
